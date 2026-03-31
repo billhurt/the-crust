@@ -35,6 +35,7 @@
   {% endif %}
 
   <main>{% block content %}{% endblock %}</main>
+  <form style="display:none">{% csrf_token %}</form>
 
   <footer class="footer">
     <p><strong>The Crust</strong> &mdash; None Go Bye Farm &mdash; Handmade with love 🍕</p>
