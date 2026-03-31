@@ -1,9 +1,5 @@
 function getCsrf() {
-  const cookie = document.cookie.split(';').find(c => c.trim().startsWith('csrftoken='));
-  if (cookie) return cookie.split('=')[1];
-  const input = document.querySelector('[name=csrfmiddlewaretoken]');
-  if (input) return input.value;
-  return '';
+  return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 }
 
 function showToast(msg) {
