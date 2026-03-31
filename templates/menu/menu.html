@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Menu — The Crust{% endblock %}
+
+{% block content %}
+
+<div class="hero">
+  <div class="hero-ring hero-ring-1"></div>
+  <div class="hero-ring hero-ring-2"></div>
+  <span class="hero-badge">Now Taking Orders</span>
+  <h1>Fresh from the farm,<br>straight to your door.</h1>
+  <p>Stone-baked pizzas made with love at None Go Bye Farm</p>
+</div>
+
+<nav class="category-tabs" aria-label="Menu categories">
+  <a href="#all" class="cat-tab active" data-category="all">All</a>
+  {% for category in categories %}
+    <a href="#{{ category.slug }}" class="cat-tab" data-category="{{ category.slug }}">{{ category.name }}</a>
+  {% endfor %}
+</nav>
+
+<div class="menu-section">
+  {% for category in categories %}
+    <div class="category-section" data-category="{{ category.slug }}" id="{{ category.slug }}">
+      <h2 class="section-heading">{{ category.name }}</h2>
+      <div class="menu-grid">
+        {% for item in category.items.all %}
+          {% if item.is_available %}
+            <article class="menu-card" data-item-id="{{ item.pk }}">
+              {% if item.image %}
+                <img src="{{ item.image.url }}" alt="{{ item.name }}" class="item-icon" />
+              {% else %}
+                <div class="item-icon-placeholder">🍕</div>
+              {% endif %}
+              <div class="item-body">
+                <p class="item-name">{{ item.name }}</p>
+                {% if item.description %}
+                  <p class="item-desc">{{ item.description }}</p>
+                {% endif %}
+                <div class="item-footer">
+                  <span class="item-price">£{{ item.price }}</span>
+                  <div class="cart-control" id="control-{{ item.pk }}">
+                    <button
+                      class="btn-add"
+                      aria-label="Add {{ item.name }} to order"
+                      onclick="cartAdd({{ item.pk }}, this)"
+                    >+</button>
+                  </div>
+                </div>
+              </div>
+            </article>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  {% empty %}
+    <div class="empty-state">
+      <p>Menu coming soon — call us to order!</p>
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Category tab filtering
+  const tabs = document.querySelectorAll('.cat-tab');
+  const sections = document.querySelectorAll('.category-section');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', e => {
+      e.preventDefault();
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const cat = tab.dataset.category;
+      sections.forEach(s => {
+        s.style.display = (cat === 'all' || s.dataset.category === cat) ? '' : 'none';
+      });
+    });
+  });
+</script>
+{% endblock %}

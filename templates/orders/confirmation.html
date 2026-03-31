@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Order Confirmed — The Crust{% endblock %}
+
+{% block content %}
+<div class="page-container">
+  <div class="confirmation-card">
+    <div class="confirm-icon">🍕</div>
+    <h1>Order received!</h1>
+    <p>Thanks, <strong>{{ order.customer_name }}</strong>. We're on it.</p>
+    <p style="font-size:13px; margin-top:4px;">Confirmation sent to {{ order.customer_email }}</p>
+
+    <div class="order-details">
+      <div class="order-details-row">
+        <span>Order number</span>
+        <strong>#{{ order.pk }}</strong>
+      </div>
+      <div class="order-details-row">
+        <span>Type</span>
+        <strong>{{ order.get_order_type_display }}</strong>
+      </div>
+      {% if order.order_type == 'delivery' %}
+        <div class="order-details-row">
+          <span>Address</span>
+          <strong>{{ order.delivery_address }}</strong>
+        </div>
+      {% else %}
+        <div class="order-details-row">
+          <span>Collection from</span>
+          <strong>None Go Bye Farm</strong>
+        </div>
+      {% endif %}
+      {% for item in order.items.all %}
+        <div class="order-details-row">
+          <span>{{ item.quantity }}× {{ item.menu_item.name }}</span>
+          <strong>£{{ item.line_total }}</strong>
+        </div>
+      {% endfor %}
+      {% if order.delivery_charge %}
+        <div class="order-details-row">
+          <span>Delivery</span>
+          <strong>£{{ order.delivery_charge }}</strong>
+        </div>
+      {% endif %}
+      <div class="order-details-row" style="font-size:16px;">
+        <span><strong>Total</strong></span>
+        <strong>£{{ order.total }}</strong>
+      </div>
+    </div>
+
+    <p style="font-size:13px; color:var(--text-muted);">
+      We'll give you a call on <strong>{{ order.customer_phone }}</strong> when it's ready.
+    </p>
+
+    <a href="{% url 'menu:menu' %}" class="btn-primary" style="margin-top:1.5rem; display:inline-block;">
+      Back to menu
+    </a>
+  </div>
+</div>
+{% endblock %}

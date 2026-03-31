@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}The Crust — None Go Bye Farm{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="{% url 'menu:menu' %}" class="navbar-brand">
+      <img src="{% static 'img/logo.jpg' %}" alt="The Crust logo" class="navbar-logo" />
+      <div class="brand-text">
+        <span class="brand-name">The Crust</span>
+        <span class="brand-tagline">None Go Bye Farm</span>
+      </div>
+    </a>
+    <a href="{% url 'orders:cart' %}" class="cart-link">
+      🛒 Order
+      {% if cart_count > 0 %}
+        <span class="cart-badge">{{ cart_count }}</span>
+      {% endif %}
+    </a>
+  </nav>
+
+  {% if messages %}
+    <ul class="messages-list">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <main>{% block content %}{% endblock %}</main>
+
+  <footer class="footer">
+    <p><strong>The Crust</strong> &mdash; None Go Bye Farm &mdash; Handmade with love 🍕</p>
+    <p style="margin-top:6px; font-size:12px;">Order by phone: <strong>01234 567890</strong></p>
+  </footer>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="{% static 'js/cart.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
