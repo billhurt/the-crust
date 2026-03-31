@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.db import models
 from menu.models import MenuItem
 
@@ -50,7 +51,7 @@ class Order(models.Model):
 
     def calculate_totals(self):
         self.subtotal = sum(item.line_total for item in self.items.all())
-        self.delivery_charge = 2.50 if self.order_type == 'delivery' else 0
+        self.delivery_charge = Decimal('2.50') if self.order_type == 'delivery' else Decimal('0')
         self.total = self.subtotal + self.delivery_charge
         self.save(update_fields=['subtotal', 'delivery_charge', 'total'])
 
