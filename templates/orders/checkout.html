@@ -104,8 +104,8 @@
 
 {% block extra_js %}
 <script>
-  const subtotal = {{ cart.subtotal }};
-  const deliveryCharge = {{ delivery_charge }};
+  const subtotal = parseFloat("{{ cart.subtotal|default:'0' }}");
+  const deliveryCharge = parseFloat("{{ delivery_charge|default:'2.50' }}");
 
   function setOrderType(type) {
     document.getElementById('orderTypeInput').value = type;
